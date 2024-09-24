@@ -1,0 +1,156 @@
+**SH & BASH
+docker exec -it 596ea4dd4ddb sh
+docker exec -it 596ea4dd4ddb bash
+
+**Mode Foreground & Detached
+
+Foreground -p ค้าง
+docker run -p 9000:80 nginx
+
+docker run --name mrnginx -p 7000:80 nginx
+
+docker stop NAMES
+docker rm CONTAINER ID
+docker run -d -p 9000:80 nginx
+docker logs CONTAINER ID
+docker logs -f CONTAINER ID
+docker system info
+docker system df
+docker system events
+docker images
+docker image ls
+docker image inspect nginx
+docker image rm IMAGE NAME
+docker image prune --all
+
+
+Detached -d ไม่ค้าง
+docker run -d -p 8000:80 nginx
+
+**Logs
+docker logs 71b9b221f775c59a23076f612f003829bf12e9ef072c8d4ffec4dc61fac45d7f
+
+logs -f ค้าง
+
+**Clear
+  - all stopped containers
+  - all networks not used by at least one container
+  - all dangling images
+  - all dangling build cache
+
+docker system prune
+
+docker system info
+docker system df
+docker system events
+
+docker images
+docker image ls 
+docker image inspect nginx
+docker image rm busybox
+docker image prune --all
+
+สามารถดูคำสั่งที่ Docker Client มีให้ทั้งหมดได้ที่ https://docs.docker.com/engine/reference/commandline/docker/
+
+
+โหลด images นะครับ 
+docker pull wordpress
+docker pull mysql:5.7
+docker pull phpmyadmin/phpmyadmin
+
+**Create network
+
+docker network create wordpress
+docker network ls
+ docker network rm wordpress
+ 
+docker run --name mysql --network wordpress -e MYSQL_ROOT_PASSWORD=1111 -e MYSQL_DATABASE=wordpress_db -e MYSQL_USER=wordpress -e MYSQL_PASSWORD=wordpress -d mysql:5.7
+docker run --name pma --network wordpress -p 8888:80 -e PMA_ARBITRARY=1 -d phpmyadmin/phpmyadmin
+docker run -d --name wordpress --network wordpress -p 888:80 -e WORDPRESS_DB_HOST=mysql -e WORDPRESS_DB_USER=wordpress -e WORDPRESS_DB_PASSWORD=wordpress -e WORDPRESS_DB_NAME=wordpress_db wordpress
+
+** Join network
+docker network connect wordpress mysql
+docker network connect wordpress pma 
+
+** Show network
+docker network inspect wordpress
+
+
+การเก็บข้อมูล
+1.เก็บที่ข้อมูลที่ Container
+2.volume
+3.bindmount
+
+แบบ 1
+docker exec -it pma sh
+apt-get update
+apt-get install vim
+vi a.text กด i พิมพข้อมูล กด esc อออก พิมพ์ :wq enter save
+
+apt-get update
+apt-get install bash
+
+แบบ 2 volume
+docker volume ls
+docker volume create wp_volume
+docker volume create mysql_volume
+docker volume rm wp_volume mysql_volume
+
+docker container inspect wordpress
+ที่อยู่ volume /var/www/html
+
+docker container inspect mysql
+ที่อยู่ volume /var/lib/mysql
+
+สร้างเอง 
+docker volume create wp_volume
+docker volume create mysql_volume
+docker network create wordpress02
+docker network ls
+docker volume ls
+
+docker run -d --name mysql02 --network wordpress02 -v mysql_volume:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=1111 -e MYSQL_DATABASE=wordpress02_db -e MYSQL_USER=wordpress -e MYSQL_PASSWORD=wordpress  mysql:5.7
+docker run -d --name wordpress02 --network wordpress02 -v wp_volume:/var/www/html -e WORDPRESS_DB_HOST=mysql02 -e WORDPRESS_DB_USER=wordpress -e WORDPRESS_DB_PASSWORD=wordpress -e WORDPRESS_DB_NAME=wordpress02_db -p 889:80 wordpress
+docker run --name pma02 --network wordpress02 -p 8889:80 -e PMA_ARBITRARY=1 -d phpmyadmin/phpmyadmin
+
+แบบ 3 bindmount
+docker network create wordpress03
+docker run -d --name mysql03 --network wordpress03 -v C:\Users\tatom\Desktop\docker-bootcamp\wordpress\mysql:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=1111 -e MYSQL_DATABASE=wordpress03_db -e MYSQL_USER=wordpress -e MYSQL_PASSWORD=wordpress  mysql:5.7
+docker run -d --name wordpress03 --network wordpress03 -v C:\Users\tatom\Desktop\docker-bootcamp\wordpress\wp:/var/www/html -e WORDPRESS_DB_HOST=mysql03 -e WORDPRESS_DB_USER=wordpress -e WORDPRESS_DB_PASSWORD=wordpress -e WORDPRESS_DB_NAME=wordpress03_db -p 890:80 wordpress
+docker run --name pma03 --network wordpress03 -p 8890:80 -e PMA_ARBITRARY=1 -d phpmyadmin/phpmyadmin
+
+docker compose
+
+โครงสร้าง
+version: '3'
+services:
+  wordpress:
+  db:
+  phpmyadmin:
+networks:
+  myNetwork:
+volumes:
+  database:
+
+รันปกติ
+docker-compose up
+
+รันแบบระบุชื่อ
+docker-compose up -f aaa.yml
+
+รันแบบยังไม่เริ่มทำงาน
+docker-compose up --no-start
+
+ปิดและลบ
+docker-compose down
+
+รันแบบไม่ค้าง
+docker-compose up -d
+
+docker-compose ps
+
+docker-compose start
+
+
+
+

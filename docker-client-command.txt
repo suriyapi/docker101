@@ -1,0 +1,97 @@
+docker run hello-world
+docker ps 
+docker ps --all
+docker run busybox echo 'hello world in docker'
+docker run busybox ls  
+docker run busybox ping google.com
+docker stop CONTAINER ID
+docker pull busybox
+docker create busybox ping google.com
+docker start CONTAINER ID
+
+docker start -a CONTAINER ID
+
+docker system prune
+docker run nginx
+
+docker exec CONTAINER ID ls
+
+docker exec -it CONTAINER ID sh
+docker exec -it CONTAINER ID bash
+
+cd /usr/share/nginx/html
+cat index.html
+
+docker run -p 80:80 nginx
+docker run -p 9000:80 nginx
+
+
+
+
+
+
+// CREATE CONTAINERS ------------------------------------------------------------------------
+docker create <image>
+// START CONTAINERS -------------------------------------------------------------------------
+docker start <container>
+// WATCH OUTPUT THEN PUT IT TO TERMINAL
+docker start -a <container>
+
+// STOPPING CONTAINERS ----------------------------------------------------------------------
+docker stop <container>
+
+// LISTING IMAGES
+docker images
+docker image ls
+
+// REMOVE IMAGES
+docker image rm <image>
+
+// REMOVING UNUSED IMAGES --------------------------------------------------------------
+docker image prune
+docker image prune --all
+
+// INSPECT IMAGE
+docker image inspect <image>
+// INSPECT IMAGE FILTER
+docker image inspect -f <word> <image>
+
+// RUN CONTAINERS ---------------------------------------------------------------------------
+// docker run = docker create + docker start
+docker run <image>
+
+// OVERRIDING DEFAULT COMMANDS --------------------------------------------------------------
+docker run <image> <command>
+// PORT MAPPING
+docker run -p <local port>:<container port> <image>
+// RUNNING IN BACKGROUND
+docker run -d <image>
+// ASSIGN CONTAINER NAME
+docker run --name <container name>
+// RUNNING WITH INTERACTIVE
+docker run -it <container> <command>
+
+// LISTING RUNNING CONTAINERS ---------------------------------------------------------------
+docker ps
+docker ps --all
+
+// REMOVING STOPPED CONTAINERS --------------------------------------------------------------
+docker system prune
+// SHOW DOCKER DISK USAGE -------------------------------------------------------------------
+docker system df
+// GET REAL TIME EVENTS FROM THE SERVER -----------------------------------------------------
+docker system events
+// DISPLAY SYSTEM-WIDE INFORMATION ----------------------------------------------------------
+docker system info
+
+// RETRIEVING LOG OUTPUTS -------------------------------------------------------------------
+docker logs <container>
+
+
+
+
+
+// EXECUTING COMMANDS IN RUNNING CONTAINERS -------------------------------------------------
+docker exec -it <container> <command>
+docker exec -it <container> sh
+docker exec -it <container> redis-cli
